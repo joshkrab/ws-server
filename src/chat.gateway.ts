@@ -29,7 +29,8 @@ export class ChatGateway implements OnModuleInit {
   // Subscribed to the 'newMessage' event name - we can send messages to the server with this name
   @SubscribeMessage('newMessage')
   onNewMessage(@MessageBody() body: any): void {
-    console.log(body);
+    console.log('Message from body: ', body);
+
     // Created event 'onMessage' in postman(frontend), who will receive the message
     this.server.emit('onMessage', {
       message: 'New message',
