@@ -12,7 +12,11 @@ import { Server } from 'socket.io';
 // @WebSocketGateway(80, {
 //   namespace: 'chat',
 // })
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: ['http://localhost:3000'],
+  },
+})
 export class ChatGateway implements OnModuleInit {
   // Server for sending messages from here
   @WebSocketServer()
