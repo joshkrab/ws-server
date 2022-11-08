@@ -14,7 +14,7 @@ import { Server } from 'socket.io';
 // })
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
   },
 })
 export class ChatGateway implements OnModuleInit {
@@ -25,17 +25,17 @@ export class ChatGateway implements OnModuleInit {
   // Output in console info about connection
   onModuleInit() {
     this.server.on('connection', (socket) => {
-      console.log(socket.id);
-      console.log('Connected');
+      console.log('User connected: ', socket.id);
     });
   }
 
   // Subscribed to the 'newMessage' event name - we can send messages to the server with this name
   @SubscribeMessage('newMessage')
   onNewMessage(@MessageBody() body: any): void {
-    console.log('Message from body: ', body);
+    console.log('Message body: ', body);
 
-    // Created event 'onMessage' in postman(frontend), who will receive the message
+    // Created event 'onMessage' in postman(frontend), who will receive the message:
+    // socket.on('onMessage',{}) - on frontend
     this.server.emit('onMessage', {
       message: 'New message',
       content: body,
