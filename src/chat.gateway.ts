@@ -18,6 +18,8 @@ import { Server } from 'socket.io';
   },
 })
 export class ChatGateway implements OnModuleInit {
+  rooms = new Map();
+
   // Server for sending messages from here
   @WebSocketServer()
   server: Server;
@@ -25,6 +27,14 @@ export class ChatGateway implements OnModuleInit {
   // Output in console info about connection
   onModuleInit() {
     this.server.on('connection', (socket) => {
+      // Listen event:
+      socket.on('ROOM:JOIN', (data) => {
+        console.log(data);
+        // Connect to room:
+        socket.join(data.roomId);
+        // 1:23
+      });
+
       console.log('User connected: ', socket.id);
     });
   }
@@ -40,5 +50,19 @@ export class ChatGateway implements OnModuleInit {
       message: 'New message',
       content: body,
     });
+  }
+
+  async createRoom(roomId: string) {
+    if (!this.rooms.has(roomId)) {
+      this.rooms.set(
+        roomId,
+        new Map<string, any>([
+          ['user', new Map()],
+          ['messages', []],
+        ]),
+      );
+    }
+    console.log(this.rooms);
+    return roomId;
   }
 }
