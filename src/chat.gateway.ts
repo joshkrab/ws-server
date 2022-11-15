@@ -29,10 +29,18 @@ export class ChatGateway implements OnModuleInit {
     this.server.on('connection', (socket) => {
       // Listen event:
       socket.on('ROOM:JOIN', (data) => {
-        console.log(data);
         // Connect to room:
         socket.join(data.roomId);
-        // 1:23
+        // When we connected to room, we want to get room object:
+        // Then we get collection of users and save current user and id
+        this.rooms.get(data.roomId).get('users').set(socket.id, data.userName);
+        // Get all users:
+        const users = this.rooms.get(data.roomId).get('users').values();
+        // We create an event for the room:
+        // .broadcast - for everyone but me, except for yourself
+        // Send socket request 'ROOM:JOINED'
+        socket.broadcast.to(data.roomId).emit('ROOM:JOINED', users);
+        //
       });
 
       console.log('User connected: ', socket.id);
@@ -57,7 +65,7 @@ export class ChatGateway implements OnModuleInit {
       this.rooms.set(
         roomId,
         new Map<string, any>([
-          ['user', new Map()],
+          ['users', new Map()],
           ['messages', []],
         ]),
       );
