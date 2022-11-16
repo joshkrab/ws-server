@@ -1,15 +1,14 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ChatGateway } from 'src/chat.gateway';
+import { ChatService } from './chat.service';
 
 @Controller('chat')
 export class ChatController {
-  constructor(private socketService: ChatGateway) {}
+  constructor(private chatService: ChatService) {}
 
   @Post()
   async createRoom(@Body() dto: any): Promise<any> {
-    console.log('Hello dto:', dto);
     const { roomId } = dto;
 
-    return this.socketService.createRoom(roomId);
+    return this.chatService.createRoom(roomId);
   }
 }

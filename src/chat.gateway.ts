@@ -7,6 +7,7 @@ import {
 } from '@nestjs/websockets';
 
 import { Server } from 'socket.io';
+import { rooms } from './chat/chat.service';
 
 // (PORT, {})
 // @WebSocketGateway(80, {
@@ -18,8 +19,6 @@ import { Server } from 'socket.io';
   },
 })
 export class ChatGateway implements OnModuleInit {
-  rooms = new Map();
-
   // Server for sending messages from here
   @WebSocketServer()
   server: Server;
@@ -29,21 +28,22 @@ export class ChatGateway implements OnModuleInit {
     this.server.on('connection', (socket) => {
       // Listen event:
       socket.on('ROOM:JOIN', (data) => {
+        console.log('data: ', data);
         // Connect to room:
         socket.join(data.roomId);
         // When we connected to room, we want to get room object:
         // Then we get collection of users and save current user and id
-        this.rooms.get(data.roomId).get('users').set(socket.id, data.userName);
+        rooms.get(data.roomId).get('users').set(socket.id, data.userName);
         // Get all users:
-        const users = this.rooms.get(data.roomId).get('users').values();
+        const users = [...rooms.get(data.roomId).get('users').values()];
+        console.log('users: ', users);
         // We create an event for the room:
         // .broadcast - for everyone but me, except for yourself
         // Send socket request 'ROOM:JOINED'
         socket.broadcast.to(data.roomId).emit('ROOM:JOINED', users);
         //
       });
-
-      console.log('User connected: ', socket.id);
+      console.log('Connection created: ', socket.id);
     });
   }
 
@@ -58,19 +58,5 @@ export class ChatGateway implements OnModuleInit {
       message: 'New message',
       content: body,
     });
-  }
-
-  async createRoom(roomId: string) {
-    if (!this.rooms.has(roomId)) {
-      this.rooms.set(
-        roomId,
-        new Map<string, any>([
-          ['users', new Map()],
-          ['messages', []],
-        ]),
-      );
-    }
-    console.log(this.rooms);
-    return roomId;
   }
 }
