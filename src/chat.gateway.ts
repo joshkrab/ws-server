@@ -28,21 +28,20 @@ export class ChatGateway implements OnModuleInit {
     this.server.on('connection', (socket) => {
       // Listen event:
       socket.on('ROOM:JOIN', (data) => {
-        console.log('data: ', data);
         // Connect to room:
         socket.join(data.roomId);
-        // When we connected to room, we want to get room object:
-        // Then we get collection of users and save current user and id
+        // Get collection of users and save current user and id
         rooms.get(data.roomId).get('users').set(socket.id, data.userName);
         // Get all users:
         const users = [...rooms.get(data.roomId).get('users').values()];
-        console.log('users: ', users);
+
         // We create an event for the room:
         // .broadcast - for everyone but me, except for yourself
         // Send socket request 'ROOM:JOINED'
         socket.broadcast.to(data.roomId).emit('ROOM:JOINED', users);
         //
       });
+      // 1:47
       console.log('Connection created: ', socket.id);
     });
   }
@@ -50,7 +49,7 @@ export class ChatGateway implements OnModuleInit {
   // Subscribed to the 'newMessage' event name - we can send messages to the server with this name
   @SubscribeMessage('newMessage')
   onNewMessage(@MessageBody() body: any): void {
-    console.log('Message body: ', body);
+    // console.log('Message body: ', body);
 
     // Created event 'onMessage' in postman(frontend), who will receive the message:
     // socket.on('onMessage',{}) - on frontend
