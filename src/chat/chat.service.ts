@@ -18,4 +18,18 @@ export class ChatService {
       return roomId;
     }
   }
+
+  async getRoomUsers(roomId: string) {
+    const obj = rooms.has(roomId)
+      ? {
+          users: [...rooms.get(roomId).get('users').values()],
+          messages: [...rooms.get(roomId).get('messages').values()],
+        }
+      : {
+          users: [],
+          messages: [],
+        };
+
+    return obj;
+  }
 }

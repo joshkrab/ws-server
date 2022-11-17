@@ -36,12 +36,22 @@ export class ChatGateway implements OnModuleInit {
         const users = [...rooms.get(data.roomId).get('users').values()];
 
         // We create an event for the room:
-        // .broadcast - for everyone but me, except for yourself
+        // .broadcast.to() - for everyone but me, except for yourself
         // Send socket request 'ROOM:JOINED'
-        socket.broadcast.to(data.roomId).emit('ROOM:JOINED', users);
+        socket.broadcast.to(data.roomId).emit('ROOM:SET_USERS', users);
         //
       });
-      // 1:47
+      // Delete users when disconnect:
+      socket.on('disconnect', () => {
+        // forEach((value, key)...
+        rooms.forEach((value, roomId) => {
+          // Delete from collection users
+          if (value.get('users').delete(socket.id)) {
+            const users = [...value.get('users').values()];
+            socket.broadcast.to(roomId).emit('ROOM:SET_USERS', users);
+          }
+        });
+      });
       console.log('Connection created: ', socket.id);
     });
   }
