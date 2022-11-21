@@ -1,10 +1,5 @@
 import { OnModuleInit } from '@nestjs/common';
-import {
-  MessageBody,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-} from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 
 import { Server } from 'socket.io';
 import { rooms } from './chat/chat.service';
@@ -52,20 +47,14 @@ export class ChatGateway implements OnModuleInit {
           }
         });
       });
+
+      socket.on('ROOM:NEW_MESSAGE', (data) => {
+        const messageObj = { userName: data.userName, text: data.text };
+        rooms.get(data.roomId).get('messages').push(messageObj);
+        socket.broadcast.to(data.roomId).emit('ROOM:NEW_MESSAGE', messageObj);
+      });
+
       console.log('Connection created: ', socket.id);
-    });
-  }
-
-  // Subscribed to the 'newMessage' event name - we can send messages to the server with this name
-  @SubscribeMessage('newMessage')
-  onNewMessage(@MessageBody() body: any): void {
-    // console.log('Message body: ', body);
-
-    // Created event 'onMessage' in postman(frontend), who will receive the message:
-    // socket.on('onMessage',{}) - on frontend
-    this.server.emit('onMessage', {
-      message: 'New message',
-      content: body,
     });
   }
 }
