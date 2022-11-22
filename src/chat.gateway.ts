@@ -15,6 +15,7 @@ import { rooms } from './chat/chat.service';
       'http://localhost:3001',
       'http://localhost:5000',
       'http://localhost:9001',
+      'https://joshkrab.github.io',
       'https://joshkrab.github.io/ws-client/',
     ],
   },

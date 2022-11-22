@@ -11,6 +11,7 @@ async function bootstrap() {
       'http://localhost:5000',
       'http://localhost:9001',
       'https://joshkrab.github.io/ws-client/',
+      'https://joshkrab.github.io',
     ],
   });
 
