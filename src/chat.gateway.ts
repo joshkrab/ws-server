@@ -13,6 +13,7 @@ import { rooms } from './chat/chat.service';
     origin: [
       'http://localhost:3000',
       'http://localhost:3001',
+      'http://localhost:5000',
       'https://joshkrab.github.io/ws-client/',
     ],
   },
