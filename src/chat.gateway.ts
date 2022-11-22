@@ -10,7 +10,11 @@ import { rooms } from './chat/chat.service';
 // })
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://joshkrab.github.io/ws-client/',
+    ],
   },
 })
 export class ChatGateway implements OnModuleInit {

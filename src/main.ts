@@ -5,7 +5,11 @@ async function bootstrap() {
   const PORT = process.env.PORT || 9001;
   const app = await NestFactory.create(AppModule);
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://joshkrab.github.io/ws-client/',
+    ],
   });
 
   // Run server:
