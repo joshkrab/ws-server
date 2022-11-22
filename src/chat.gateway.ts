@@ -54,6 +54,16 @@ export class ChatGateway implements OnModuleInit {
         socket.broadcast.to(data.roomId).emit('ROOM:NEW_MESSAGE', messageObj);
       });
 
+      socket.on('USER_WRITE', (data) => {
+        const userName = data.userName;
+        console.log(userName);
+        socket.broadcast.to(data.roomId).emit('FE:USER_WRITE', userName);
+      });
+
+      socket.on('USER_BLUR', (data) => {
+        socket.broadcast.to(data.roomId).emit('FE:USER_BLUR', data.roomId);
+      });
+
       console.log('Connection created: ', socket.id);
     });
   }
