@@ -1,0 +1,32 @@
+00 Installing --------------------------------------------------------------------------------------------------------------------------
+
+	- Generated nest project
+	- npm i @nestjs/websockets @nestjs/platform-socket.io
+	- npm i -D @types/socket.io
+
+	- create file for websockets logic: chat.gateway.ts
+	- gateway - nests abstraction of sockets
+	- write some logic in this file
+	- imported this class in providers in app.module
+
+	- Then we need to provide some event handlers for the messages
+
+01 Connect from another nest server ---------------------------------------------------------------------------------------------------
+
+	- generated project
+	- nest generate module socket
+	- npm i socket.io-client
+
+02 Connect from react ----------------------------------------------------------------------------------------------------------------
+
+	- npx create-react-app ws-react-client --template typescript
+	- npm i socket.io-client
+	- create "contexts" folder and file inside - WebsocketContext.tsx
+
+03 CORS connect --------------------------------------------------------------------------------------------------------------------------------
+
+	- Add option in @WebSocketGateway()
+ 
+04 Creating rooms -----------------------------------------------------------------------------------------------------------------------------
+
+	- 16 minute
