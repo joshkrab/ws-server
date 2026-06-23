@@ -18,6 +18,7 @@ import { rooms } from './chat/chat.service';
       'https://joshkrab.github.io',
       'https://joshkrab.github.io/ws-client/',
       'https://ws-server-f691.onrender.com',
+      'http://localhost:5175',
     ],
   },
 })
